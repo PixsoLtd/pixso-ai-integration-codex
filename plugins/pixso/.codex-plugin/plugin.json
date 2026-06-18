@@ -1,0 +1,43 @@
+{
+    "name":  "pixso",
+    "version":  "0.3.0",
+    "description":  "Pixso AI integration for design-to-code, code-to-design, design editing, assets, variables, styles, components, and visual verification.",
+    "author":  {
+                   "name":  "Pixso"
+               },
+    "homepage":  "https://pixso.cn",
+    "repository":  "https://git.bosyun.cn/pixso-client/frontend/pixso-ai-integration",
+    "keywords":  [
+                     "pixso",
+                     "design-to-code",
+                     "code-to-design",
+                     "mcp",
+                     "design-system"
+                 ],
+    "skills":  "./skills/",
+    "mcpServers":  "./.mcp.json",
+    "interface":  {
+                      "displayName":  "Pixso",
+                      "shortDescription":  "Pixso design automation and MCP integration.",
+                      "longDescription":  "Use Pixso design context, MCP tools, and skills for design-to-code, code-to-design, design editing, asset handling, variables, styles, components, and visual verification.",
+                      "developerName":  "Pixso",
+                      "category":  "Design",
+                      "capabilities":  [
+                                           "Interactive",
+                                           "Read",
+                                           "Write"
+                                       ],
+                      "websiteURL":  "https://pixso.cn",
+                      "brandColor":  "#2F6BFF",
+                      "composerIcon":  "./assets/pixso-full-color.svg",
+                      "logo":  "./assets/pixso-full-color.svg",
+                      "defaultPrompt":  [
+                                            "Use Pixso design context to implement this UI",
+                                            "Create or update a Pixso design from code",
+                                            "Verify visual parity against Pixso design"
+                                        ],
+                      "screenshots":  [
+
+                                      ]
+                  }
+}

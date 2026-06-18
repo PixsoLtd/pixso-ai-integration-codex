@@ -1,0 +1,23 @@
+{
+    "lockVersion":  1,
+    "pluginId":  "pixso@pixso-codex",
+    "pluginVersion":  "1.0.0",
+    "generatedBy":  "codex adapter alignment",
+    "generatedAt":  "2026-06-18T07:30:19Z",
+    "skills":  [
+                   "pixso-use",
+                   "pixso-design-to-code",
+                   "pixso-code-to-design",
+                   "pixso-design-editing",
+                   "pixso-design-system",
+                   "pixso-resource-handling",
+                   "pixso-visual-verify"
+               ],
+    "mcpServers":  [
+                       {
+                           "name":  "pixso",
+                           "type":  "http",
+                           "url":  "http://localhost:3667/mcp"
+                       }
+                   ]
+}

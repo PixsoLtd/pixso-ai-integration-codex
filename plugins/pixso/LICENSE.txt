@@ -1,0 +1,4 @@
+Copyright (c) Pixso.
+
+Internal Pixso plugin package for Codex-compatible local workflows.
+Use, redistribution, and modification are governed by Pixso internal policy unless a separate license is provided.
