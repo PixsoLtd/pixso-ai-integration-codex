@@ -1,7 +1,7 @@
 {
-    "name":  "pixso-codex",
+    "name":  "pixso",
     "interface":  {
-                      "displayName":  "Pixso Codex"
+                      "displayName":  "Pixso"
                   },
     "plugins":  [
                     {
