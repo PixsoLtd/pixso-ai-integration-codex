@@ -1,0 +1,7 @@
+agents:
+  pixso-implementation:
+    description: Implement Pixso designs in code with visual parity.
+  pixso-visual-review:
+    description: Review code output against Pixso designs.
+  pixso-design-system:
+    description: Create and maintain Pixso design system assets.
