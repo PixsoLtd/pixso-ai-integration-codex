@@ -64,6 +64,15 @@ Before handling URL input, read and follow [references/url-capture.md](reference
 
 Default to the browser's native complete webpage save output, equivalent to Ctrl+S / Save Page As / Webpage Complete. Do not manually download every page resource by default. Only use DOM / CSS-aware visual resource collection when browser save is unavailable or clearly incomplete.
 
+## Non-downgrade gates
+
+Follow these even when the reference file has not been loaded:
+
+- "Web page / URL / HTML / ZIP to Pixso" or explicit `code_to_design` means exact capture and conversion, not reference-based reconstruction.
+- Hard-to-capture URLs, login/permission/error/empty states, hash routes, iframes, anti-abuse controls, or missing assets are blockers or incomplete input; ask whether to import the current state or provide the target state.
+- If `code_to_design` fails, the wrong input was passed, or the result mismatches, only report the failure point and next options; do not switch to `pixso-design` / `apply_design` / approximate reconstruction without confirmation.
+- Do not pass placeholder HTML, temporary stubs, summaries, paths, or `PLACEHOLDER`; report the blocker when the final artifact cannot be prepared.
+
 ## Critical rules
 
 1. **Conversion is not verification.** A successful `code_to_design` call only means Pixso created nodes; it does not prove visual accuracy.
