@@ -1,0 +1,11 @@
+interface:
+  display_name: "Pixso Component Config"
+  short_description: "Generate Pixso D2C component parser JSON"
+  default_prompt: "Use $pixso-component-config to generate a component parser JSON from the current Pixso file; first choose a local component library path or an open source component library with docs."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "pixso-local"
+      description: "Pixso desktop local MCP server with get_all_components and get_node_dsl"
+      transport: "streamable_http"
+      url: "http://127.0.0.1:3667/mcp"
