@@ -1,12 +1,12 @@
 {
     "name":  "pixso",
-    "version":  "1.0.8",
+    "version":  "1.0.9",
     "description":  "Pixso AI integration for design-to-code, code-to-design, design editing, assets, variables, styles, components, and visual verification.",
     "author":  {
                    "name":  "Pixso"
                },
     "homepage":  "https://pixso.cn",
-    "repository":  "https://git.bosyun.cn/pixso-client/frontend/pixso-ai-integration",
+    "repository":  "https://github.com/PixsoLtd/pixso-ai-integration-codex",
     "keywords":  [
                      "pixso",
                      "design-to-code",

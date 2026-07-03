@@ -1,93 +1,285 @@
-# pixso-ai-integration-codex
+# Pixso AI Integration for Codex
 
+Pixso AI Integration for Codex 是面向 OpenAI Codex 的本地 Pixso 插件包。它把 Pixso MCP、Design-to-Code、Code-to-Design、设计编辑和组件解析配置工作流打包成 Codex plugin，可在 Codex app、Codex CLI 和支持 Codex plugin directory 的本地工作流中使用。
 
+Claude Code、Cursor 和 Gemini CLI 用户请使用多平台仓库：[PixsoLtd/pixso-ai-integration](https://github.com/PixsoLtd/pixso-ai-integration)。
 
-## Getting started
+## 插件内容
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://git.bosyun.cn/pixso-client/frontend/pixso-ai-integration-codex.git
-git branch -M master
-git push -uf origin master
+```text
+.agents/plugins/marketplace.json          Repo-scoped Codex marketplace
+plugins/pixso/.codex-plugin/plugin.json   Codex plugin manifest
+plugins/pixso/plugin.lock.json            Plugin lock / skill registration
+plugins/pixso/.mcp.json                   Pixso MCP server config
+plugins/pixso/commands/                   Codex command definitions
+plugins/pixso/skills/                     Pixso skills
+plugins/pixso/scripts/                    Validation and MCP health-check scripts
 ```
 
-## Integrate with your tools
+当前包含 4 个 skills：
 
-- [ ] [Set up project integrations](https://git.bosyun.cn/pixso-client/frontend/pixso-ai-integration-codex/-/settings/integrations)
+| Skill | 用途 |
+| --- | --- |
+| `pixso-design-to-code` | 将 Pixso 节点、页面、组件或 URL 转成目标框架代码，并做资源本地化和安全 cleanup。 |
+| `pixso-code-to-design` | 将网页 URL、HTML、ZIP 或静态 Web 产物导入 Pixso，优先走精确 capture + `code_to_design`。 |
+| `pixso-design-editing` | 在 Pixso 内创建、修改、检查和优化 UI 设计稿。 |
+| `pixso-component-config` | 生成或更新 Pixso Design-to-Code 的 `componentParsers` / component config JSON。 |
 
-## Collaborate with your team
+当前包含 1 个 command：
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+| Command | 用途 |
+| --- | --- |
+| `/pixso-d2c-plus-config` | 调用 `pixso-component-config`，生成或更新 Design-to-Code 组件解析配置。 |
 
-## Test and Deploy
+Codex 专属差异：
 
-Use the built-in continuous integration in GitLab.
+- `plugins/pixso/agents/openai.yaml` 和 skill 内的 `agents/openai.yaml` 只保留在 Codex 包内，用于 Codex/OpenAI agent wrapper。
+- `plugin.lock.json` 明确注册可用 skill 列表。
+- `.agents/plugins/marketplace.json` 让本仓库可以作为 Codex marketplace 安装源。
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 前置要求
 
-***
+1. 安装 Pixso Desktop。
+2. 打开目标 Pixso 文件。
+3. 启动 Pixso MCP 服务，默认地址为：
 
-# Editing this README
+```text
+http://localhost:3667/mcp
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+4. 安装并登录 Codex CLI / Codex app。
 
-## Suggestions for a good README
+如果 Pixso MCP 地址不是默认值，请修改：
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```text
+plugins/pixso/.mcp.json
+```
 
-## Name
-Choose a self-explaining name for your project.
+## 方式一：从 GitHub marketplace 安装
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Codex 支持从 GitHub 仓库添加 plugin marketplace。添加本仓库：
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```bash
+codex plugin marketplace add PixsoLtd/pixso-ai-integration-codex
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+检查 marketplace：
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```bash
+codex plugin marketplace list
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+安装 Pixso plugin：
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```bash
+codex plugin add pixso@pixso
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+安装后启动一个新 Codex thread，再让 Codex 使用 Pixso plugin。新 thread 是推荐边界，能确保新 skills、commands 和 MCP 配置被加载。
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## 方式二：从本地 clone 安装
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```bash
+git clone https://github.com/PixsoLtd/pixso-ai-integration-codex.git
+cd pixso-ai-integration-codex
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+把本地仓库作为 marketplace 源添加：
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```bash
+codex plugin marketplace add .
+codex plugin add pixso@pixso
+```
 
-## License
-For open source projects, say how it is licensed.
+Windows PowerShell 示例：
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```powershell
+git clone https://github.com/PixsoLtd/pixso-ai-integration-codex.git D:\AI\pixso-ai-integration-codex
+cd D:\AI\pixso-ai-integration-codex
+codex plugin marketplace add .
+codex plugin add pixso@pixso
+```
+
+## 在 Codex app 中安装
+
+如果你使用 Codex app：
+
+1. 先用 CLI 添加 marketplace：
+
+```bash
+codex plugin marketplace add PixsoLtd/pixso-ai-integration-codex
+```
+
+2. 打开 Codex app 的 Plugins / Plugin Directory。
+3. 在 marketplace 中找到 `Pixso`。
+4. 选择安装。
+5. 新开一个 thread 使用插件。
+
+## 配置 Pixso MCP
+
+默认配置：
+
+```json
+{
+  "mcpServers": {
+    "pixso": {
+      "type": "http",
+      "url": "http://localhost:3667/mcp"
+    }
+  }
+}
+```
+
+配置文件位置：
+
+```text
+plugins/pixso/.mcp.json
+```
+
+如果你的 Pixso MCP 运行在其他端口，修改该文件后重新安装或重新加载插件。
+
+检查 MCP 是否可达：
+
+```powershell
+.\plugins\pixso\scripts\check_mcp_server.ps1
+```
+
+或：
+
+```powershell
+Invoke-WebRequest -UseBasicParsing -Method Head -Uri "http://localhost:3667/mcp"
+```
+
+## 更新插件
+
+### GitHub marketplace 安装
+
+刷新 marketplace：
+
+```bash
+codex plugin marketplace upgrade pixso
+```
+
+重新安装或更新插件：
+
+```bash
+codex plugin add pixso@pixso
+```
+
+然后新开一个 Codex thread。
+
+### 本地 clone 安装
+
+```bash
+cd <repo>
+git pull
+codex plugin add pixso@pixso
+```
+
+然后新开一个 Codex thread。
+
+## 校验插件结构
+
+本地开发或排查时可以运行：
+
+```powershell
+.\plugins\pixso\scripts\validate_pixso_plugin.ps1
+```
+
+它会检查：
+
+- `plugins/pixso/.codex-plugin/plugin.json`
+- `plugins/pixso/.mcp.json`
+- `plugins/pixso/skills/`
+
+## 使用方式
+
+安装后，你可以直接让 Codex 使用 Pixso。
+
+### 设计转代码
+
+```text
+Use Pixso to convert this selected frame to React code and save all generated assets locally.
+```
+
+也可以给 Pixso URL：
+
+```text
+Convert this Pixso URL to Vue code: <Pixso node URL>
+```
+
+### 网页或 HTML 导入 Pixso
+
+```text
+Import this page into Pixso as editable design nodes: https://example.com
+```
+
+如果页面需要登录、权限、区域访问或资源不可抓取，Codex 会先报告阻塞点，不会自动降级成近似重建设计。
+
+### Pixso 设计编辑
+
+```text
+Create a dashboard screen in the current Pixso file using the existing design tokens and components.
+```
+
+```text
+Refine the selected Pixso frame: improve spacing, hierarchy, and visual consistency.
+```
+
+### 组件解析配置
+
+使用 command：
+
+```text
+/pixso-d2c-plus-config
+```
+
+或直接说：
+
+```text
+Use pixso-component-config to generate componentParsers for the current Pixso component library and Element Plus.
+```
+
+## 常见问题
+
+### 安装后看不到 Pixso plugin
+
+1. 检查 marketplace 是否存在：
+
+```bash
+codex plugin marketplace list
+```
+
+2. 检查 plugin 是否安装：
+
+```bash
+codex plugin list
+```
+
+3. 确认安装后新开了 thread。
+
+### 看不到 `/pixso-d2c-plus-config`
+
+重新安装插件并新开 thread：
+
+```bash
+codex plugin add pixso@pixso
+```
+
+### Pixso MCP 不可达
+
+确认 Pixso Desktop 正在运行，目标文件已打开，且 MCP 服务地址与 `plugins/pixso/.mcp.json` 一致。
+
+### 旧的 `pixso-design` 还出现
+
+当前版本使用 `pixso-design-editing`。如果仍看到 `pixso-design`，通常是旧插件缓存或旧 thread：
+
+1. 运行 `codex plugin marketplace upgrade pixso`。
+2. 运行 `codex plugin add pixso@pixso`。
+3. 新开 thread。
+
+## 参考
+
+- Codex plugins：[Plugins - Codex](https://developers.openai.com/codex/plugins)
+- Codex plugin build guide：[Build plugins - Codex](https://developers.openai.com/codex/plugins/build)
+- Codex CLI plugin commands：[Command line options - Codex CLI](https://developers.openai.com/codex/cli/reference)
