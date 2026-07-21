@@ -8,7 +8,8 @@
                    "pixso-code-to-design",
                    "pixso-component-config",
                    "pixso-design-editing",
-                   "pixso-design-to-code"
+                   "pixso-design-to-code",
+                   "pixso-read-dsl"
                ],
     "mcpServers":  [
                        {
