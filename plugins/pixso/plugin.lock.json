@@ -1,14 +1,15 @@
 {
     "lockVersion":  1,
     "pluginId":  "pixso@pixso-codex",
-    "pluginVersion":  "1.0.9",
+    "pluginVersion":  "1.0.11",
     "generatedBy":  "codex adapter alignment",
     "generatedAt":  "2026-06-18T07:30:19Z",
     "skills":  [
                    "pixso-code-to-design",
                    "pixso-component-config",
                    "pixso-design-editing",
-                   "pixso-design-to-code"
+                   "pixso-design-to-code",
+                   "pixso-read-dsl"
                ],
     "mcpServers":  [
                        {
